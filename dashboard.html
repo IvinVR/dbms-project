@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SCMS Dashboard — Manage campus inventory, users, schedules, and announcements from one unified hub.">
+  <title>SCMS — Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="app-shell" id="appShell">
+
+  <!-- ════════════ SIDEBAR ════════════ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-name">SCMS<span>.</span></div>
+      <div class="sidebar-brand-sub">SmartCampus Management</div>
+    </div>
+
+    <nav class="sidebar-nav" id="sidebarNav">
+      <!-- Populated by JS based on role -->
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user" id="sidebarUser">
+        <div class="sidebar-avatar" id="sidebarAvatar">AJ</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="sidebarUserName">Alex Johnson</div>
+          <div class="sidebar-user-role" id="sidebarUserRole">Student</div>
+        </div>
+      </div>
+      <button class="logout-btn" id="logoutBtn" onclick="logout()">
+        <span>⬅</span> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- ════════════ TOPBAR ════════════ -->
+  <header class="topbar" id="topbar">
+    <h2 class="topbar-title" id="topbarTitle">Dashboard</h2>
+
+    <div class="topbar-search">
+      <span class="topbar-search-icon">🔍</span>
+      <input type="text" placeholder="Search..." id="topbarSearchInput">
+    </div>
+
+    <div class="notif-bell-wrap" id="notifBellWrap">
+      <button class="notif-bell" id="notifBellBtn" onclick="toggleNotifPopup()">
+        🔔
+        <span class="notif-bell-dot" id="notifBellDot"></span>
+      </button>
+      <div class="notif-popup" id="notifPopup">
+        <div class="notif-popup-head">
+          <h3>Notifications</h3>
+          <button class="notif-popup-mark-btn" onclick="markAllRead()">Mark all read</button>
+        </div>
+        <div class="notif-popup-body" id="notifPopupBody">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-chip" id="profileChip">
+      <div class="profile-chip-avatar" id="profileChipAvatar">AJ</div>
+      <span class="profile-chip-name" id="profileChipName">Alex</span>
+    </div>
+  </header>
+
+  <!-- ════════════ MAIN CONTENT ════════════ -->
+  <main class="main-content" id="mainContent">
+
+    <!-- ═══════ STUDENT SECTIONS ═══════ -->
+
+    <!-- Inventory -->
+    <section class="dash-section" id="secInventory" data-role="student">
+      <div class="welcome-banner" id="studentWelcome">
+        <div class="welcome-banner-text">
+          <h2 id="studentGreeting">Good evening, Alex 👋</h2>
+          <p>Browse and reserve campus resources for your classes.</p>
+        </div>
+        <div class="welcome-banner-actions">
+          <button class="banner-btn banner-btn-primary" onclick="showSection('secMyReservations','navMyReservations')">My Reservations</button>
+          <button class="banner-btn banner-btn-ghost" onclick="showSection('secSchedule','navSchedule')">View Schedule</button>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <h2 class="section-title">Campus Inventory</h2>
+      </div>
+
+      <div class="chip-group" id="inventoryChips">
+        <button class="chip active" data-category="all" onclick="filterInventory('all')">All</button>
+        <button class="chip" data-category="AV" onclick="filterInventory('AV')">🎥 AV</button>
+        <button class="chip" data-category="IT" onclick="filterInventory('IT')">💻 IT</button>
+        <button class="chip" data-category="Stationery" onclick="filterInventory('Stationery')">✏️ Stationery</button>
+        <button class="chip" data-category="Electrical" onclick="filterInventory('Electrical')">⚡ Electrical</button>
+        <button class="chip" data-category="Other" onclick="filterInventory('Other')">📎 Other</button>
+      </div>
+
+      <div class="inventory-grid" id="inventoryGrid">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- Notifications (Student) -->
+    <section class="dash-section" id="secNotifications" data-role="student">
+      <div class="section-header">
+        <h2 class="section-title">Notifications</h2>
+      </div>
+      <div class="notif-list" id="studentNotifList">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- Schedule (Student) -->
+    <section class="dash-section" id="secSchedule" data-role="student">
+      <div class="section-header">
+        <h2 class="section-title">Faculty Schedule</h2>
+      </div>
+      <div class="schedule-grid-wrap">
+        <div class="schedule-grid" id="studentScheduleGrid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- My Reservations (Student) -->
+    <section class="dash-section" id="secMyReservations" data-role="student">
+      <div class="section-header">
+        <h2 class="section-title">My Reservations</h2>
+      </div>
+      <div class="table-wrap">
+        <table id="studentReservationsTable">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Qty</th>
+              <th>Status</th>
+              <th>Due Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="studentReservationsBody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Announcements (Student) -->
+    <section class="dash-section" id="secAnnouncements" data-role="student">
+      <div class="section-header">
+        <h2 class="section-title">Announcements</h2>
+      </div>
+      <div class="announcements-list" id="studentAnnouncementsList">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- ═══════ ADMIN SECTIONS ═══════ -->
+
+    <!-- Admin Overview -->
+    <section class="dash-section" id="secAdminOverview" data-role="admin">
+      <div class="welcome-banner">
+        <div class="welcome-banner-text">
+          <h2 id="adminGreeting">Welcome back, Admin 🛡️</h2>
+          <p>Here's a snapshot of your campus operations.</p>
+        </div>
+        <div class="welcome-banner-actions">
+          <button class="banner-btn banner-btn-primary" onclick="showSection('secManageUsers','navManageUsers')">Manage Users</button>
+          <button class="banner-btn banner-btn-ghost" onclick="showSection('secAdminInventory','navAdminInventory')">View Inventory</button>
+        </div>
+      </div>
+
+      <div class="stat-grid" id="adminStatGrid">
+        <!-- Populated by JS -->
+      </div>
+
+      <div class="section-header">
+        <h2 class="section-title">Recent Reservations</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Student</th>
+              <th>Qty</th>
+              <th>Status</th>
+              <th>Due Date</th>
+            </tr>
+          </thead>
+          <tbody id="adminRecentResBody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section-header" style="margin-top:.5rem">
+        <h2 class="section-title">Quick Actions</h2>
+      </div>
+      <div class="quick-actions">
+        <button class="quick-action-btn" onclick="openModal('addUserModal')">➕ Add User</button>
+        <button class="quick-action-btn" onclick="openModal('addItemModal')">📦 Add Item</button>
+        <button class="quick-action-btn" onclick="openModal('sendNotifModal')">🔔 Send Notification</button>
+        <button class="quick-action-btn" onclick="openModal('postAnnouncementModal')">📢 Post Announcement</button>
+      </div>
+    </section>
+
+    <!-- Manage Users -->
+    <section class="dash-section" id="secManageUsers" data-role="admin">
+      <div class="section-header">
+        <h2 class="section-title">Manage Users</h2>
+        <button class="add-btn" onclick="openModal('addUserModal')">➕ Add User</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Batch</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Admin Inventory -->
+    <section class="dash-section" id="secAdminInventory" data-role="admin">
+      <div class="section-header">
+        <h2 class="section-title">Inventory Management</h2>
+        <button class="add-btn" onclick="openModal('addItemModal')">➕ Add Item</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Category</th>
+              <th>Total Qty</th>
+              <th>Available</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminInventoryBody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Admin Reservations -->
+    <section class="dash-section" id="secAdminReservations" data-role="admin">
+      <div class="section-header">
+        <h2 class="section-title">All Reservations</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Student</th>
+              <th>Qty</th>
+              <th>Status</th>
+              <th>Due Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminReservationsBody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Admin Notifications -->
+    <section class="dash-section" id="secAdminNotifs" data-role="admin">
+      <div class="section-header">
+        <h2 class="section-title">Notifications</h2>
+        <button class="add-btn" onclick="openModal('sendNotifModal')">🔔 Send Notification</button>
+      </div>
+      <div class="notif-list" id="adminNotifList">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- ═══════ FACULTY SECTIONS ═══════ -->
+
+    <!-- Faculty Overview -->
+    <section class="dash-section" id="secFacOverview" data-role="faculty">
+      <div class="welcome-banner">
+        <div class="welcome-banner-text">
+          <h2 id="facGreeting">Good evening, Prof. Smith 📚</h2>
+          <p>Here's your teaching overview for today.</p>
+        </div>
+        <div class="welcome-banner-actions">
+          <button class="banner-btn banner-btn-primary" onclick="showSection('secFacSchedule','navFacSchedule')">My Schedule</button>
+          <button class="banner-btn banner-btn-ghost" onclick="showSection('secFacStudents','navFacStudents')">My Students</button>
+        </div>
+      </div>
+
+      <div class="stat-grid" id="facStatGrid">
+        <!-- Populated by JS -->
+      </div>
+
+      <div class="section-header">
+        <h2 class="section-title">Today's Schedule</h2>
+      </div>
+      <div class="schedule-grid-wrap">
+        <div class="schedule-grid" id="facOverviewScheduleGrid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Faculty Schedule -->
+    <section class="dash-section" id="secFacSchedule" data-role="faculty">
+      <div class="section-header">
+        <h2 class="section-title">My Schedule</h2>
+        <button class="add-btn" onclick="openModal('uploadScheduleModal')">📅 Upload Schedule</button>
+      </div>
+      <div class="schedule-grid-wrap">
+        <div class="schedule-grid" id="facScheduleGrid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Assigned Students -->
+    <section class="dash-section" id="secFacStudents" data-role="faculty">
+      <div class="section-header">
+        <h2 class="section-title">Assigned Students</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Batch</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="facStudentsBody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Faculty Notifications -->
+    <section class="dash-section" id="secFacNotifs" data-role="faculty">
+      <div class="section-header">
+        <h2 class="section-title">Notifications</h2>
+      </div>
+      <div class="notif-list" id="facNotifList">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- ═══════ CR / SUBADMIN SECTIONS ═══════ -->
+
+    <!-- CR Overview -->
+    <section class="dash-section" id="secCROverview" data-role="subadmin">
+      <div class="welcome-banner">
+        <div class="welcome-banner-text">
+          <h2 id="crGreeting">Hey CR! Welcome back 📋</h2>
+          <p>Manage announcements and notifications for your batch.</p>
+        </div>
+        <div class="welcome-banner-actions">
+          <button class="banner-btn banner-btn-primary" onclick="showSection('secCRAnnounce','navCRAnnounce')">Announcements</button>
+          <button class="banner-btn banner-btn-ghost" onclick="showSection('secCRNotif','navCRNotif')">Send Notification</button>
+        </div>
+      </div>
+
+      <div class="stat-grid" id="crStatGrid">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- CR Announcements -->
+    <section class="dash-section" id="secCRAnnounce" data-role="subadmin">
+      <div class="section-header">
+        <h2 class="section-title">Announcements</h2>
+        <button class="add-btn" onclick="openModal('postAnnouncementModal')">📢 Post Announcement</button>
+      </div>
+      <div class="announcements-list" id="crAnnouncementsList">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- CR Send Notifications -->
+    <section class="dash-section" id="secCRNotif" data-role="subadmin">
+      <div class="section-header">
+        <h2 class="section-title">Send Notifications</h2>
+        <button class="add-btn" onclick="openModal('sendNotifModal')">🔔 New Notification</button>
+      </div>
+      <div class="notif-list" id="crNotifList">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- CR Browse Inventory -->
+    <section class="dash-section" id="secCRInventory" data-role="subadmin">
+      <div class="section-header">
+        <h2 class="section-title">Browse Inventory</h2>
+      </div>
+      <div class="chip-group" id="crInventoryChips">
+        <button class="chip active" data-category="all" onclick="filterInventory('all','cr')">All</button>
+        <button class="chip" data-category="AV" onclick="filterInventory('AV','cr')">🎥 AV</button>
+        <button class="chip" data-category="IT" onclick="filterInventory('IT','cr')">💻 IT</button>
+        <button class="chip" data-category="Stationery" onclick="filterInventory('Stationery','cr')">✏️ Stationery</button>
+        <button class="chip" data-category="Electrical" onclick="filterInventory('Electrical','cr')">⚡ Electrical</button>
+      </div>
+      <div class="inventory-grid" id="crInventoryGrid">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ════════════ MODALS ════════════ -->
+
+<!-- Edit User Modal -->
+<div class="modal-overlay" id="editUserModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>Edit User</h2>
+      <button class="modal-close" onclick="closeModal('editUserModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editUserId">
+      <div class="form-field">
+        <label for="editUserName">Name</label>
+        <input type="text" id="editUserName">
+      </div>
+      <div class="form-field">
+        <label for="editUserEmail">Email</label>
+        <input type="email" id="editUserEmail">
+      </div>
+      <div class="form-field">
+        <label for="editUserRole">Role</label>
+        <select id="editUserRole">
+          <option value="Student">Student</option>
+          <option value="Sub-Admin">Sub-Admin</option>
+          <option value="Faculty">Faculty</option>
+          <option value="Admin">Admin</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="editUserBatch">Batch</label>
+        <input type="text" id="editUserBatch">
+      </div>
+      <div class="form-field">
+        <label for="editUserStatus">Status</label>
+        <select id="editUserStatus">
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-secondary" onclick="closeModal('editUserModal')">Cancel</button>
+      <button class="modal-btn modal-btn-primary" onclick="saveEditUser()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add User Modal -->
+<div class="modal-overlay" id="addUserModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>Add New User</h2>
+      <button class="modal-close" onclick="closeModal('addUserModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label for="addUserName">Name</label>
+        <input type="text" id="addUserName" placeholder="Full name">
+      </div>
+      <div class="form-field">
+        <label for="addUserEmail">Email</label>
+        <input type="email" id="addUserEmail" placeholder="user@campus.edu">
+      </div>
+      <div class="form-field">
+        <label for="addUserRole">Role</label>
+        <select id="addUserRole">
+          <option value="Student">Student</option>
+          <option value="Sub-Admin">Sub-Admin</option>
+          <option value="Faculty">Faculty</option>
+          <option value="Admin">Admin</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="addUserBatch">Batch</label>
+        <input type="text" id="addUserBatch" placeholder="e.g. 2023–27">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-secondary" onclick="closeModal('addUserModal')">Cancel</button>
+      <button class="modal-btn modal-btn-primary" onclick="addUser()">Add User</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Item Modal -->
+<div class="modal-overlay" id="editItemModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>Edit Item</h2>
+      <button class="modal-close" onclick="closeModal('editItemModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editItemId">
+      <div class="form-field">
+        <label for="editItemName">Name</label>
+        <input type="text" id="editItemName">
+      </div>
+      <div class="form-field">
+        <label for="editItemIcon">Icon (emoji)</label>
+        <input type="text" id="editItemIcon">
+      </div>
+      <div class="form-field">
+        <label for="editItemCategory">Category</label>
+        <select id="editItemCategory">
+          <option value="AV">AV</option>
+          <option value="IT">IT</option>
+          <option value="Stationery">Stationery</option>
+          <option value="Electrical">Electrical</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="editItemQty">Total Quantity</label>
+        <input type="number" id="editItemQty" min="0">
+      </div>
+      <div class="form-field">
+        <label for="editItemAvailable">Available</label>
+        <input type="number" id="editItemAvailable" min="0">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-secondary" onclick="closeModal('editItemModal')">Cancel</button>
+      <button class="modal-btn modal-btn-primary" onclick="saveEditItem()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Item Modal -->
+<div class="modal-overlay" id="addItemModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>Add New Item</h2>
+      <button class="modal-close" onclick="closeModal('addItemModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label for="addItemName">Name</label>
+        <input type="text" id="addItemName" placeholder="Item name">
+      </div>
+      <div class="form-field">
+        <label for="addItemIcon">Icon (emoji)</label>
+        <input type="text" id="addItemIcon" placeholder="📦">
+      </div>
+      <div class="form-field">
+        <label for="addItemCategory">Category</label>
+        <select id="addItemCategory">
+          <option value="AV">AV</option>
+          <option value="IT">IT</option>
+          <option value="Stationery">Stationery</option>
+          <option value="Electrical">Electrical</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="addItemQty">Total Quantity</label>
+        <input type="number" id="addItemQty" min="1" value="1">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-secondary" onclick="closeModal('addItemModal')">Cancel</button>
+      <button class="modal-btn modal-btn-primary" onclick="addItem()">Add Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Schedule Modal -->
+<div class="modal-overlay" id="uploadScheduleModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>Upload Schedule</h2>
+      <button class="modal-close" onclick="closeModal('uploadScheduleModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label for="uploadSchDay">Day</label>
+        <select id="uploadSchDay">
+          <option value="Mon">Monday</option>
+          <option value="Tue">Tuesday</option>
+          <option value="Wed">Wednesday</option>
+          <option value="Thu">Thursday</option>
+          <option value="Fri">Friday</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="uploadSchTime">Time</label>
+        <input type="time" id="uploadSchTime" value="09:00">
+      </div>
+      <div class="form-field">
+        <label for="uploadSchLabel">Subject</label>
+        <input type="text" id="uploadSchLabel" placeholder="e.g. Data Structures">
+      </div>
+      <div class="form-field">
+        <label for="uploadSchRoom">Room</label>
+        <input type="text" id="uploadSchRoom" placeholder="e.g. Room 301">
+      </div>
+      <div class="form-field">
+        <label for="uploadSchColor">Color</label>
+        <select id="uploadSchColor">
+          <option value="sch-event-green">Green</option>
+          <option value="sch-event-blue">Blue</option>
+          <option value="sch-event-amber">Amber</option>
+          <option value="sch-event-rose">Rose</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-secondary" onclick="closeModal('uploadScheduleModal')">Cancel</button>
+      <button class="modal-btn modal-btn-primary" onclick="uploadSchedule()">Add to Schedule</button>
+    </div>
+  </div>
+</div>
+
+<!-- Post Announcement Modal -->
+<div class="modal-overlay" id="postAnnouncementModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>Post Announcement</h2>
+      <button class="modal-close" onclick="closeModal('postAnnouncementModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label for="announceTitle">Title</label>
+        <input type="text" id="announceTitle" placeholder="Announcement title">
+      </div>
+      <div class="form-field">
+        <label for="announceBody">Body</label>
+        <textarea id="announceBody" placeholder="Announcement details..."></textarea>
+      </div>
+      <div class="form-field">
+        <label for="announceType">Type</label>
+        <select id="announceType">
+          <option value="default">Default</option>
+          <option value="urgent">Urgent</option>
+          <option value="info">Info</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="announceTarget">Target Audience</label>
+        <input type="text" id="announceTarget" placeholder="e.g. All Students, Batch 2023">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-secondary" onclick="closeModal('postAnnouncementModal')">Cancel</button>
+      <button class="modal-btn modal-btn-primary" onclick="postAnnouncement()">Post</button>
+    </div>
+  </div>
+</div>
+
+<!-- Send Notification Modal -->
+<div class="modal-overlay" id="sendNotifModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>Send Notification</h2>
+      <button class="modal-close" onclick="closeModal('sendNotifModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label for="sendNotifTitle">Title</label>
+        <input type="text" id="sendNotifTitle" placeholder="Notification title">
+      </div>
+      <div class="form-field">
+        <label for="sendNotifDesc">Description</label>
+        <textarea id="sendNotifDesc" placeholder="Notification message..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-secondary" onclick="closeModal('sendNotifModal')">Cancel</button>
+      <button class="modal-btn modal-btn-primary" onclick="sendNotification()">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

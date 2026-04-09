@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SmartCampus Management System — Streamline your campus operations with a unified platform for inventory, scheduling, and communication.">
+  <title>SCMS — Login</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="login-page" id="loginPage">
+
+  <!-- Left visual panel -->
+  <div class="login-visual">
+    <div class="login-visual-brand">
+      <div class="login-visual-logo">SCMS<span>.</span></div>
+      <p class="login-visual-tagline">
+        SmartCampus Management System — one platform for everything your campus needs.
+      </p>
+      <div class="login-visual-features">
+        <div class="login-visual-feature">
+          <div class="login-visual-feature-icon">📦</div>
+          <span>Smart Inventory Tracking</span>
+        </div>
+        <div class="login-visual-feature">
+          <div class="login-visual-feature-icon">🗓️</div>
+          <span>Faculty Schedule Management</span>
+        </div>
+        <div class="login-visual-feature">
+          <div class="login-visual-feature-icon">📢</div>
+          <span>Announcements &amp; Notifications</span>
+        </div>
+        <div class="login-visual-feature">
+          <div class="login-visual-feature-icon">👥</div>
+          <span>Role-Based Access Control</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right login card panel -->
+  <div class="login-form-side">
+    <div class="login-card">
+
+      <div class="login-card-header">
+        <h1>Welcome back</h1>
+        <p>Sign in to your campus account</p>
+      </div>
+
+      <!-- Role Tabs -->
+      <div class="role-tabs" id="roleTabs">
+        <button class="role-tab active" data-role="student">Student</button>
+        <button class="role-tab" data-role="faculty">Faculty</button>
+        <button class="role-tab" data-role="admin">Admin</button>
+        <button class="role-tab" data-role="subadmin">CR</button>
+      </div>
+
+      <!-- Login Form / Sign Up Form -->
+      <form class="login-form" id="loginForm" autocomplete="off">
+        <div class="form-field" id="nameField" style="display: none;">
+          <label for="loginName">Full Name</label>
+          <input type="text" id="loginName" placeholder="Your Name">
+        </div>
+        <div class="form-field">
+          <label for="loginEmail">Email address</label>
+          <input type="email" id="loginEmail" placeholder="you@campus.edu" required>
+        </div>
+        <div class="form-field">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required>
+        </div>
+        <div class="form-field" id="retypePasswordField" style="display: none;">
+          <label for="loginRetypePassword">Retype Password</label>
+          <input type="password" id="loginRetypePassword" placeholder="••••••••">
+        </div>
+        <button type="submit" class="login-btn" id="loginBtn">
+          <span class="btn-text" id="btnText">Sign In</span>
+          <span class="spinner"></span>
+        </button>
+      </form>
+
+      <!-- Toggle Auth Mode -->
+      <div class="toggle-auth">
+        <p><span id="toggleAuthPrefix">Don't have an account?</span> <span id="toggleAuthBtn">Sign up</span></p>
+      </div>
+
+      <!-- Demo Chips -->
+      <div class="demo-section">
+        <div class="demo-section-title">Quick Demo Access</div>
+        <div class="demo-chips" id="demoChips">
+          <button class="demo-chip" data-role="student" data-email="alex.johnson@campus.edu" data-pass="student123">
+            🎒 Student
+          </button>
+          <button class="demo-chip" data-role="faculty" data-email="prof.smith@campus.edu" data-pass="faculty123">
+            👨‍🏫 Faculty
+          </button>
+          <button class="demo-chip" data-role="admin" data-email="admin@campus.edu" data-pass="admin123">
+            🛡️ Admin
+          </button>
+          <button class="demo-chip" data-role="subadmin" data-email="cr.batch23@campus.edu" data-pass="cr1234">
+            📋 CR
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
