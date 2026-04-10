@@ -18,6 +18,8 @@ const pool = process.env.DB_URL
       connectionLimit: 10,
       queueLimit: 0,
       timezone: 'Z',
+      enableKeepAlive: true,
+      keepAliveInitialDelay: 0,
     })
   : mysql.createPool({
       host: process.env.DB_HOST || 'localhost',
@@ -30,6 +32,8 @@ const pool = process.env.DB_URL
       connectionLimit: 10,
       queueLimit: 0,
       timezone: 'Z',
+      enableKeepAlive: true,
+      keepAliveInitialDelay: 0,
     });
 
 module.exports = pool;
