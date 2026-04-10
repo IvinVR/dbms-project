@@ -205,7 +205,7 @@
         <h2 class="section-title">Quick Actions</h2>
       </div>
       <div class="quick-actions">
-        <button class="quick-action-btn" onclick="openModal('addUserModal')"><i class="fas fa-plus"></i> Add User</button>
+        <button class="quick-action-btn" onclick="openAddUserModal()"><i class="fas fa-plus"></i> Add User</button>
         <button class="quick-action-btn" onclick="openModal('addItemModal')"><i class="fas fa-box"></i> Add Item</button>
         <button class="quick-action-btn" onclick="openModal('sendNotifModal')"><i class="fas fa-bell"></i> Send Notification</button>
         <button class="quick-action-btn" onclick="openModal('postAnnouncementModal')"><i class="fas fa-bullhorn"></i> Post Announcement</button>
@@ -216,7 +216,7 @@
     <section class="dash-section" id="secManageUsers" data-role="admin">
       <div class="section-header">
         <h2 class="section-title">Manage Users</h2>
-        <button class="add-btn" onclick="openModal('addUserModal')"><i class="fas fa-plus"></i> Add User</button>
+        <button class="add-btn" onclick="openAddUserModal()"><i class="fas fa-plus"></i> Add User</button>
       </div>
       <div class="table-wrap">
         <table>
@@ -337,9 +337,32 @@
       </div>
     </section>
 
+    <!-- Faculty Assign CR -->
+    <section class="dash-section" id="secFacAssignCR" data-role="faculty">
+      <div class="section-header">
+        <h2 class="section-title">Assign Class Representative</h2>
+        <button class="add-btn" onclick="openAddUserModal()">
+          <i class="fas fa-user-plus"></i> Assign CR
+        </button>
+      </div>
+      <p style="color:var(--text-muted);font-size:.9rem;margin-bottom:.5rem">
+        As a faculty member, you can assign students to the Class Representative (Sub-Admin) role.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th><th>Email</th><th>Batch</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="facCRTableBody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
 
 
-    <!-- Faculty Notifications -->
     <section class="dash-section" id="secFacNotifs" data-role="faculty">
       <div class="section-header">
         <h2 class="section-title">Notifications</h2>
@@ -462,7 +485,7 @@
 <div class="modal-overlay" id="addUserModal">
   <div class="modal-box">
     <div class="modal-header">
-      <h2>Add New User</h2>
+      <h2 id="addUserModalTitle">Add New User</h2>
       <button class="modal-close" onclick="closeModal('addUserModal')">&times;</button>
     </div>
     <div class="modal-body">
@@ -477,10 +500,7 @@
       <div class="form-field">
         <label for="addUserRole">Role</label>
         <select id="addUserRole">
-          <option value="Student">Student</option>
-          <option value="Sub-Admin">Sub-Admin</option>
-          <option value="Faculty">Faculty</option>
-          <option value="Admin">Admin</option>
+          <!-- Options populated dynamically by JS based on logged-in role -->
         </select>
       </div>
       <div class="form-field">

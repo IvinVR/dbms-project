@@ -248,8 +248,9 @@ const navConfig = {
     { id: "navAdminNotifs",       icon: "<i class='fas fa-bell'></i>", label: "Notifications",  section: "secAdminNotifs"       },
   ],
   faculty: [
-    { id: "navFacOverview",  icon: "<i class='fas fa-home'></i>", label: "Overview",          section: "secFacOverview"  },
-    { id: "navFacSchedule",  icon: "<i class='fas fa-calendar-alt'></i>", label: "My Schedule",      section: "secFacSchedule"  },
+    { id: "navFacOverview",    icon: "<i class='fas fa-home'></i>",         label: "Overview",      section: "secFacOverview"   },
+    { id: "navFacSchedule",    icon: "<i class='fas fa-calendar-alt'></i>", label: "My Schedule",   section: "secFacSchedule"  },
+    { id: "navFacAssignCR",    icon: "<i class='fas fa-user-plus'></i>",     label: "Assign CR",     section: "secFacAssignCR"  },
   ],
   subadmin: [
     { id: "navCROverview",   icon: "<i class='fas fa-home'></i>", label: "Overview",           section: "secCROverview"   },
@@ -496,6 +497,28 @@ async function deleteUser(id) {
   }
 }
 
+/* ── Open Add User Modal (role-aware) ── */
+function openAddUserModal() {
+  const role = store.session.role; // 'admin' or 'faculty'
+  const roleSelect = document.getElementById('addUserRole');
+  const modalTitle = document.getElementById('addUserModalTitle');
+
+  if (role === 'faculty') {
+    // Faculty can ONLY assign Sub-Admin (CR) role
+    roleSelect.innerHTML = `<option value="Sub-Admin">Sub-Admin (CR)</option>`;
+    if (modalTitle) modalTitle.textContent = 'Assign Class Representative';
+  } else {
+    // Admin can assign all roles EXCEPT Sub-Admin (only faculty can do that)
+    roleSelect.innerHTML = `
+      <option value="Student">Student</option>
+      <option value="Faculty">Faculty</option>
+      <option value="Admin">Admin</option>`;
+    if (modalTitle) modalTitle.textContent = 'Add New User';
+  }
+
+  openModal('addUserModal');
+}
+
 async function addUser() {
   const name  = document.getElementById("addUserName").value.trim();
   const email = document.getElementById("addUserEmail").value.trim();
@@ -508,7 +531,7 @@ async function addUser() {
   }
 
   try {
-    await api('/users', 'POST', { name, email, role, batch: batch || '-' });
+    await api('/users', 'POST', { name, email, role, batch: batch || '-', creator_role: store.session.role });
 
     closeModal("addUserModal");
     document.getElementById("addUserName").value = "";
@@ -517,6 +540,7 @@ async function addUser() {
 
     await loadUsers();
     renderUsersTable();
+    renderFacCRTable();
     updateAdminStats();
     showToast(`${name} added successfully — saved to database ✓`, "success");
   } catch (err) {
@@ -1596,8 +1620,35 @@ function renderAll() {
   renderScheduleGrid("facScheduleGrid", true);
   renderScheduleGrid("facOverviewScheduleGrid");
   renderFacStudents();
+  renderFacCRTable();
   updateNotifBadge();
   updateAdminStats();
   updateFacStats();
   updateCRStats();
+}
+
+/* ── Faculty CR Table ── */
+function renderFacCRTable() {
+  const tbody = document.getElementById('facCRTableBody');
+  if (!tbody) return;
+
+  const crs = store.users.filter(u => u.role === 'Sub-Admin');
+
+  if (crs.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:1rem">No Class Representatives found. Use "Assign CR" to create one.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = crs.map(u => `
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:.5rem">
+          <div class="avatar avatar-sm avatar-amber">${getInitials(u.name)}</div>
+          ${u.name}
+        </div>
+      </td>
+      <td>${u.email}</td>
+      <td>${u.batch}</td>
+      <td><span class="badge ${u.status === 'active' ? 'badge-green' : 'badge-grey'}">${u.status}</span></td>
+    </tr>`).join('');
 }

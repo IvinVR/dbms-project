@@ -93,6 +93,14 @@ app.post('/api/users', async (req, res) => {
       }
     }
 
+    // Only Faculty or Admin can create Sub-Admin (CR) accounts
+    if (role === 'Sub-Admin') {
+      const creator_role = req.body.creator_role || '';
+      if (creator_role !== 'faculty' && creator_role !== 'admin') {
+        return res.status(403).json({ error: 'Only Faculty or Admin can assign Class Representatives.' });
+      }
+    }
+
     const [result] = await pool.query(
       'INSERT INTO users (name, email, password, role, batch) VALUES (?, ?, ?, ?, ?)',
       [name, email, password || 'campus123', role || 'Student', batch || '-']
