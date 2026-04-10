@@ -86,6 +86,13 @@ app.post('/api/users', async (req, res) => {
       return res.status(400).json({ error: 'Name and email are required' });
     }
 
+    if (role === 'Admin') {
+      const [adminExists] = await pool.query("SELECT id FROM users WHERE role = 'Admin' LIMIT 1");
+      if (adminExists.length > 0) {
+        return res.status(403).json({ error: 'An Admin account already exists. Only one Admin is permitted.' });
+      }
+    }
+
     const [result] = await pool.query(
       'INSERT INTO users (name, email, password, role, batch) VALUES (?, ?, ?, ?, ?)',
       [name, email, password || 'campus123', role || 'Student', batch || '-']
