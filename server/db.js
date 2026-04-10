@@ -17,6 +17,7 @@ const pool = process.env.DB_URL
       waitForConnections: true,
       connectionLimit: 10,
       queueLimit: 0,
+      timezone: 'Z',
     })
   : mysql.createPool({
       host: process.env.DB_HOST || 'localhost',
@@ -28,6 +29,7 @@ const pool = process.env.DB_URL
       waitForConnections: true,
       connectionLimit: 10,
       queueLimit: 0,
+      timezone: 'Z',
     });
 
 module.exports = pool;

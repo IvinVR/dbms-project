@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="SCMS Dashboard — Manage campus inventory, users, schedules, and announcements from one unified hub.">
   <title>SCMS — Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -31,7 +32,7 @@
         </div>
       </div>
       <button class="logout-btn" id="logoutBtn" onclick="logout()">
-        <span>⬅</span> Logout
+        <span><i class="fas fa-sign-out-alt"></i></span> Logout
       </button>
     </div>
   </aside>
@@ -41,13 +42,13 @@
     <h2 class="topbar-title" id="topbarTitle">Dashboard</h2>
 
     <div class="topbar-search">
-      <span class="topbar-search-icon">🔍</span>
+      <span class="topbar-search-icon"><i class="fas fa-search"></i></span>
       <input type="text" placeholder="Search..." id="topbarSearchInput">
     </div>
 
     <div class="notif-bell-wrap" id="notifBellWrap">
       <button class="notif-bell" id="notifBellBtn" onclick="toggleNotifPopup()">
-        🔔
+        <i class="fas fa-bell"></i>
         <span class="notif-bell-dot" id="notifBellDot"></span>
       </button>
       <div class="notif-popup" id="notifPopup">
@@ -76,7 +77,7 @@
     <section class="dash-section" id="secInventory" data-role="student">
       <div class="welcome-banner" id="studentWelcome">
         <div class="welcome-banner-text">
-          <h2 id="studentGreeting">Good evening, Alex 👋</h2>
+          <h2 id="studentGreeting">Good evening, Alex <i class="fas fa-hand-paper"></i></h2>
           <p>Browse and reserve campus resources for your classes.</p>
         </div>
         <div class="welcome-banner-actions">
@@ -91,11 +92,11 @@
 
       <div class="chip-group" id="inventoryChips">
         <button class="chip active" data-category="all" onclick="filterInventory('all')">All</button>
-        <button class="chip" data-category="AV" onclick="filterInventory('AV')">🎥 AV</button>
-        <button class="chip" data-category="IT" onclick="filterInventory('IT')">💻 IT</button>
-        <button class="chip" data-category="Stationery" onclick="filterInventory('Stationery')">✏️ Stationery</button>
-        <button class="chip" data-category="Electrical" onclick="filterInventory('Electrical')">⚡ Electrical</button>
-        <button class="chip" data-category="Other" onclick="filterInventory('Other')">📎 Other</button>
+        <button class="chip" data-category="AV" onclick="filterInventory('AV')"><i class="fas fa-video"></i> AV</button>
+        <button class="chip" data-category="IT" onclick="filterInventory('IT')"><i class="fas fa-laptop"></i> IT</button>
+        <button class="chip" data-category="Stationery" onclick="filterInventory('Stationery')"><i class="fas fa-pencil-alt"></i> Stationery</button>
+        <button class="chip" data-category="Electrical" onclick="filterInventory('Electrical')"><i class="fas fa-bolt"></i> Electrical</button>
+        <button class="chip" data-category="Other" onclick="filterInventory('Other')"><i class="fas fa-paperclip"></i> Other</button>
       </div>
 
       <div class="inventory-grid" id="inventoryGrid">
@@ -115,8 +116,11 @@
 
     <!-- Schedule (Student) -->
     <section class="dash-section" id="secSchedule" data-role="student">
-      <div class="section-header">
+      <div class="section-header" style="justify-content: space-between; display: flex;">
         <h2 class="section-title">Faculty Schedule</h2>
+        <select id="studentFacultySelect" style="padding: 0.5rem; border-radius: 4px; border: 1px solid var(--border);" onchange="renderStudentSchedule()">
+          <option value="">Select Faculty...</option>
+        </select>
       </div>
       <div class="schedule-grid-wrap">
         <div class="schedule-grid" id="studentScheduleGrid">
@@ -164,7 +168,7 @@
     <section class="dash-section" id="secAdminOverview" data-role="admin">
       <div class="welcome-banner">
         <div class="welcome-banner-text">
-          <h2 id="adminGreeting">Welcome back, Admin 🛡️</h2>
+          <h2 id="adminGreeting">Welcome back, Admin <i class="fas fa-shield-alt"></i></h2>
           <p>Here's a snapshot of your campus operations.</p>
         </div>
         <div class="welcome-banner-actions">
@@ -201,10 +205,10 @@
         <h2 class="section-title">Quick Actions</h2>
       </div>
       <div class="quick-actions">
-        <button class="quick-action-btn" onclick="openModal('addUserModal')">➕ Add User</button>
-        <button class="quick-action-btn" onclick="openModal('addItemModal')">📦 Add Item</button>
-        <button class="quick-action-btn" onclick="openModal('sendNotifModal')">🔔 Send Notification</button>
-        <button class="quick-action-btn" onclick="openModal('postAnnouncementModal')">📢 Post Announcement</button>
+        <button class="quick-action-btn" onclick="openModal('addUserModal')"><i class="fas fa-plus"></i> Add User</button>
+        <button class="quick-action-btn" onclick="openModal('addItemModal')"><i class="fas fa-box"></i> Add Item</button>
+        <button class="quick-action-btn" onclick="openModal('sendNotifModal')"><i class="fas fa-bell"></i> Send Notification</button>
+        <button class="quick-action-btn" onclick="openModal('postAnnouncementModal')"><i class="fas fa-bullhorn"></i> Post Announcement</button>
       </div>
     </section>
 
@@ -212,7 +216,7 @@
     <section class="dash-section" id="secManageUsers" data-role="admin">
       <div class="section-header">
         <h2 class="section-title">Manage Users</h2>
-        <button class="add-btn" onclick="openModal('addUserModal')">➕ Add User</button>
+        <button class="add-btn" onclick="openModal('addUserModal')"><i class="fas fa-plus"></i> Add User</button>
       </div>
       <div class="table-wrap">
         <table>
@@ -237,7 +241,7 @@
     <section class="dash-section" id="secAdminInventory" data-role="admin">
       <div class="section-header">
         <h2 class="section-title">Inventory Management</h2>
-        <button class="add-btn" onclick="openModal('addItemModal')">➕ Add Item</button>
+        <button class="add-btn" onclick="openModal('addItemModal')"><i class="fas fa-plus"></i> Add Item</button>
       </div>
       <div class="table-wrap">
         <table>
@@ -285,7 +289,7 @@
     <section class="dash-section" id="secAdminNotifs" data-role="admin">
       <div class="section-header">
         <h2 class="section-title">Notifications</h2>
-        <button class="add-btn" onclick="openModal('sendNotifModal')">🔔 Send Notification</button>
+        <button class="add-btn" onclick="openModal('sendNotifModal')"><i class="fas fa-bell"></i> Send Notification</button>
       </div>
       <div class="notif-list" id="adminNotifList">
         <!-- Populated by JS -->
@@ -298,12 +302,11 @@
     <section class="dash-section" id="secFacOverview" data-role="faculty">
       <div class="welcome-banner">
         <div class="welcome-banner-text">
-          <h2 id="facGreeting">Good evening, Prof. Smith 📚</h2>
+          <h2 id="facGreeting">Good evening, Prof. <i class="fas fa-book"></i></h2>
           <p>Here's your teaching overview for today.</p>
         </div>
         <div class="welcome-banner-actions">
           <button class="banner-btn banner-btn-primary" onclick="showSection('secFacSchedule','navFacSchedule')">My Schedule</button>
-          <button class="banner-btn banner-btn-ghost" onclick="showSection('secFacStudents','navFacStudents')">My Students</button>
         </div>
       </div>
 
@@ -325,7 +328,7 @@
     <section class="dash-section" id="secFacSchedule" data-role="faculty">
       <div class="section-header">
         <h2 class="section-title">My Schedule</h2>
-        <button class="add-btn" onclick="openModal('uploadScheduleModal')">📅 Upload Schedule</button>
+        <button class="add-btn" onclick="openModal('uploadScheduleModal')"><i class="fas fa-calendar-plus"></i> Upload Schedule</button>
       </div>
       <div class="schedule-grid-wrap">
         <div class="schedule-grid" id="facScheduleGrid">
@@ -334,27 +337,7 @@
       </div>
     </section>
 
-    <!-- Assigned Students -->
-    <section class="dash-section" id="secFacStudents" data-role="faculty">
-      <div class="section-header">
-        <h2 class="section-title">Assigned Students</h2>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Batch</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="facStudentsBody">
-            <!-- Populated by JS -->
-          </tbody>
-        </table>
-      </div>
-    </section>
+
 
     <!-- Faculty Notifications -->
     <section class="dash-section" id="secFacNotifs" data-role="faculty">
@@ -636,6 +619,54 @@
     <div class="modal-footer">
       <button class="modal-btn modal-btn-secondary" onclick="closeModal('uploadScheduleModal')">Cancel</button>
       <button class="modal-btn modal-btn-primary" onclick="uploadSchedule()">Add to Schedule</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Schedule Modal -->
+<div class="modal-overlay" id="editScheduleModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>Edit Schedule</h2>
+      <button class="modal-close" onclick="closeModal('editScheduleModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editSchId">
+      <div class="form-field">
+        <label for="editSchDay">Day</label>
+        <select id="editSchDay">
+          <option value="Mon">Monday</option>
+          <option value="Tue">Tuesday</option>
+          <option value="Wed">Wednesday</option>
+          <option value="Thu">Thursday</option>
+          <option value="Fri">Friday</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="editSchTime">Time</label>
+        <input type="time" id="editSchTime">
+      </div>
+      <div class="form-field">
+        <label for="editSchLabel">Subject</label>
+        <input type="text" id="editSchLabel" placeholder="e.g. Data Structures">
+      </div>
+      <div class="form-field">
+        <label for="editSchRoom">Room</label>
+        <input type="text" id="editSchRoom" placeholder="e.g. Room 301">
+      </div>
+      <div class="form-field">
+        <label for="editSchColor">Color</label>
+        <select id="editSchColor">
+          <option value="sch-event-green">Green</option>
+          <option value="sch-event-blue">Blue</option>
+          <option value="sch-event-amber">Amber</option>
+          <option value="sch-event-rose">Rose</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-secondary" onclick="closeModal('editScheduleModal')">Cancel</button>
+      <button class="modal-btn modal-btn-primary" onclick="saveEditSchedule()">Save Changes</button>
     </div>
   </div>
 </div>

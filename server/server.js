@@ -384,10 +384,24 @@ app.put('/api/reservations/:id/cancel', async (req, res) => {
 //  NOTIFICATIONS
 // ═══════════════════════════════════════════
 
-// GET all notifications
+// GET all notifications (Filtered by Role)
 app.get('/api/notifications', async (req, res) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM notifications ORDER BY created_at DESC');
+    const { role } = req.query;
+    let query = 'SELECT n.* FROM notifications n LEFT JOIN users u ON n.created_by = u.id ';
+    let params = [];
+
+    if (role === 'Student') {
+      // Students see notifications from Admin, Faculty, and CRs (Sub-Admin)
+      query += "WHERE u.role IN ('Admin', 'Faculty', 'Sub-Admin') OR n.created_by IS NULL ";
+    } else if (role === 'Faculty') {
+      // Faculty ONLY receive notifications from Admin
+      query += "WHERE u.role = 'Admin' OR n.created_by IS NULL ";
+    }
+
+    query += 'ORDER BY n.created_at DESC';
+
+    const [rows] = await pool.query(query, params);
     res.json(rows);
   } catch (err) {
     console.error('Get notifications error:', err);
@@ -519,9 +533,50 @@ app.post('/api/schedule', async (req, res) => {
     );
 
     const [newEntry] = await pool.query('SELECT * FROM schedule WHERE id = ?', [result.insertId]);
+
+    // TRIGGER NOTIFICATION
+    await pool.query(
+      'INSERT INTO notifications (icon, icon_bg, title, description, created_by) VALUES (?, ?, ?, ?, ?)',
+      ["<i class='fas fa-calendar-alt'></i>", "background:#E8F0FE;color:#1A73E8", "Schedule Updated", `A new class (${subject}) was added to the schedule for ${day_of_week} by Faculty.`, faculty_id]
+    );
+
     res.status(201).json(newEntry[0]);
   } catch (err) {
     console.error('Create schedule error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// PUT edit schedule entry
+app.put('/api/schedule/:id', async (req, res) => {
+  try {
+    const { day_of_week, time_slot, subject, room, color_class } = req.body;
+    await pool.query(
+      'UPDATE schedule SET day_of_week = ?, time_slot = ?, subject = ?, room = ?, color_class = ? WHERE id = ?',
+      [day_of_week, time_slot, subject, room, color_class, req.params.id]
+    );
+
+    const [item] = await pool.query('SELECT faculty_id FROM schedule WHERE id = ?', [req.params.id]);
+
+    await pool.query(
+      'INSERT INTO notifications (icon, icon_bg, title, description, created_by) VALUES (?, ?, ?, ?, ?)',
+      ["<i class='fas fa-edit'></i>", "background:#E8F0FE;color:#1A73E8", "Schedule Updated", `The schedule for ${subject} was updated.`, item.length ? item[0].faculty_id : null]
+    );
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Update schedule error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// DELETE schedule entry
+app.delete('/api/schedule/:id', async (req, res) => {
+  try {
+    await pool.query('DELETE FROM schedule WHERE id = ?', [req.params.id]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Delete schedule error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 });

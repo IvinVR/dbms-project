@@ -90,10 +90,10 @@ function showToast(msg, type = "default", duration = 3000) {
   if (!container) return;
 
   const iconMap = {
-    success: "✅",
-    error:   "❌",
-    info:    "ℹ️",
-    default: "💬",
+    success: "<i class='fas fa-check-circle'></i>",
+    error:   "<i class='fas fa-times-circle'></i>",
+    info:    "<i class='fas fa-info-circle'></i>",
+    default: "<i class='fas fa-comment'></i>",
   };
 
   const toast = document.createElement("div");
@@ -195,7 +195,7 @@ function renderNotifPopup() {
     .map(
       (n) => `
     <div class="notif-popup-item ${!n.is_read ? "unread" : ""}" onclick="markNotifRead(${n.id})">
-      <div class="notif-popup-item-icon" style="${n.icon_bg || ""}">${n.icon || "🔔"}</div>
+      <div class="notif-popup-item-icon" style="${n.icon_bg || ""}">${n.icon || "<i class='fas fa-bell'></i>"}</div>
       <div class="notif-popup-item-content">
         <div class="notif-popup-item-title">${n.title}</div>
         <div class="notif-popup-item-desc">${n.description}</div>
@@ -234,30 +234,29 @@ document.addEventListener("click", (e) => {
 
 const navConfig = {
   student: [
-    { id: "navInventory",       icon: "📦", label: "Inventory",        section: "secInventory"       },
-    { id: "navNotifications",   icon: "🔔", label: "Notifications",    section: "secNotifications"   },
-    { id: "navSchedule",        icon: "🗓️", label: "Faculty Schedule", section: "secSchedule"        },
-    { id: "navMyReservations",  icon: "🎫", label: "My Reservations",  section: "secMyReservations"  },
-    { id: "navAnnouncements",   icon: "📢", label: "Announcements",    section: "secAnnouncements"   },
+    { id: "navInventory",       icon: "<i class='fas fa-box'></i>", label: "Inventory",        section: "secInventory"       },
+    { id: "navNotifications",   icon: "<i class='fas fa-bell'></i>", label: "Notifications",    section: "secNotifications"   },
+    { id: "navSchedule",        icon: "<i class='fas fa-calendar-alt'></i>", label: "Faculty Schedule", section: "secSchedule"        },
+    { id: "navMyReservations",  icon: "<i class='fas fa-ticket-alt'></i>", label: "My Reservations",  section: "secMyReservations"  },
+    { id: "navAnnouncements",   icon: "<i class='fas fa-bullhorn'></i>", label: "Announcements",    section: "secAnnouncements"   },
   ],
   admin: [
-    { id: "navAdminOverview",     icon: "🏠", label: "Overview",       section: "secAdminOverview"     },
-    { id: "navManageUsers",       icon: "👥", label: "Manage Users",   section: "secManageUsers"       },
-    { id: "navAdminInventory",    icon: "📦", label: "Inventory",      section: "secAdminInventory"    },
-    { id: "navAdminReservations", icon: "🎫", label: "Reservations",   section: "secAdminReservations" },
-    { id: "navAdminNotifs",       icon: "🔔", label: "Notifications",  section: "secAdminNotifs"       },
+    { id: "navAdminOverview",     icon: "<i class='fas fa-home'></i>", label: "Overview",       section: "secAdminOverview"     },
+    { id: "navManageUsers",       icon: "<i class='fas fa-users-cog'></i>", label: "Manage Users",   section: "secManageUsers"       },
+    { id: "navAdminInventory",    icon: "<i class='fas fa-box'></i>", label: "Inventory",      section: "secAdminInventory"    },
+    { id: "navAdminReservations", icon: "<i class='fas fa-ticket-alt'></i>", label: "Reservations",   section: "secAdminReservations" },
+    { id: "navAdminNotifs",       icon: "<i class='fas fa-bell'></i>", label: "Notifications",  section: "secAdminNotifs"       },
   ],
   faculty: [
-    { id: "navFacOverview",  icon: "🏠", label: "Overview",          section: "secFacOverview"  },
-    { id: "navFacSchedule",  icon: "🗓️", label: "My Schedule",      section: "secFacSchedule"  },
-    { id: "navFacStudents",  icon: "👩‍🎓", label: "Assigned Students", section: "secFacStudents"  },
-    { id: "navFacNotifs",    icon: "🔔", label: "Notifications",     section: "secFacNotifs"    },
+    { id: "navFacOverview",  icon: "<i class='fas fa-home'></i>", label: "Overview",          section: "secFacOverview"  },
+    { id: "navFacSchedule",  icon: "<i class='fas fa-calendar-alt'></i>", label: "My Schedule",      section: "secFacSchedule"  },
   ],
   subadmin: [
-    { id: "navCROverview",   icon: "🏠", label: "Overview",           section: "secCROverview"   },
-    { id: "navCRAnnounce",   icon: "📢", label: "Announcements",      section: "secCRAnnounce"   },
-    { id: "navCRNotif",      icon: "🔔", label: "Send Notifications", section: "secCRNotif"      },
-    { id: "navCRInventory",  icon: "📦", label: "Browse Inventory",   section: "secCRInventory"  },
+    { id: "navCROverview",   icon: "<i class='fas fa-home'></i>", label: "Overview",           section: "secCROverview"   },
+    { id: "navCRAnnounce",   icon: "<i class='fas fa-bullhorn'></i>", label: "Announcements",      section: "secCRAnnounce"   },
+    { id: "navCRNotif",      icon: "<i class='fas fa-bell'></i>", label: "Send Notifications", section: "secCRNotif"      },
+    { id: "navCRInventory",  icon: "<i class='fas fa-box'></i>", label: "Browse Inventory",   section: "secCRInventory"  },
+    { id: "navAdminReservations", icon: "<i class='fas fa-ticket-alt'></i>", label: "Manage Reservations", section: "secAdminReservations" },
   ],
 };
 
@@ -322,7 +321,7 @@ function renderInventoryGrid(gridId, category) {
   if (filtered.length === 0) {
     grid.innerHTML = `
       <div class="empty-state" style="grid-column:1/-1">
-        <div class="empty-state-icon">📭</div>
+        <div class="empty-state-icon"><i class="fas fa-box-open"></i></div>
         <div class="empty-state-text">No items found in this category.</div>
       </div>`;
     return;
@@ -607,7 +606,7 @@ async function deleteItem(id) {
 
 async function addItem() {
   const name     = document.getElementById("addItemName").value.trim();
-  const icon     = document.getElementById("addItemIcon").value.trim() || "📦";
+  const icon     = document.getElementById("addItemIcon").value.trim() || "<i class='fas fa-box'></i>";
   const category = document.getElementById("addItemCategory").value;
   const total_qty = parseInt(document.getElementById("addItemQty").value) || 1;
 
@@ -643,18 +642,24 @@ function renderStudentReservations() {
   const myRes = store.reservations.filter((r) => r.user_id === userId);
 
   if (myRes.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" class="empty-state"><div class="empty-state-icon">🎫</div><div>No reservations yet.</div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" class="empty-state"><div class="empty-state-icon"><i class="fas fa-ticket-alt"></i></div><div>No reservations yet.</div></td></tr>`;
     return;
   }
 
   tbody.innerHTML = myRes
     .map(
-      (r) => `
+      (r) => {
+        let timer = "";
+        if (r.status === "active") {
+          const dDiff = Math.ceil((new Date(r.due_date) - new Date()) / (1000 * 60 * 60 * 24));
+          timer = dDiff >= 0 ? ` <small>(${dDiff} days left)</small>` : ` <small class="text-danger">(Overdue)</small>`;
+        }
+        return `
     <tr>
       <td>${r.item}</td>
       <td>${r.qty}</td>
       <td><span class="badge ${statusBadgeClass(r.status)}">${r.status}</span></td>
-      <td>${formatDate(r.due_date)}</td>
+      <td>${formatDate(r.due_date)}${timer}</td>
       <td>
         ${
           r.status !== "expired"
@@ -662,7 +667,8 @@ function renderStudentReservations() {
             : `<span style="color:var(--text-3);font-size:.82rem">—</span>`
         }
       </td>
-    </tr>`
+    </tr>`;
+      }
     )
     .join("");
 }
@@ -673,13 +679,19 @@ function renderAdminReservations() {
 
   tbody.innerHTML = store.reservations
     .map(
-      (r) => `
+      (r) => {
+        let timer = "";
+        if (r.status === "active") {
+          const dDiff = Math.ceil((new Date(r.due_date) - new Date()) / (1000 * 60 * 60 * 24));
+          timer = dDiff >= 0 ? ` <small>(${dDiff} days left)</small>` : ` <small>(Overdue)</small>`;
+        }
+        return `
     <tr>
       <td>${r.item}</td>
       <td>${r.student}</td>
       <td>${r.qty}</td>
       <td><span class="badge ${statusBadgeClass(r.status)}">${r.status}</span></td>
-      <td>${formatDate(r.due_date)}</td>
+      <td>${formatDate(r.due_date)}${timer}</td>
       <td>
         ${
           r.status !== "expired"
@@ -687,7 +699,8 @@ function renderAdminReservations() {
             : `<span style="color:var(--text-3);font-size:.82rem">—</span>`
         }
       </td>
-    </tr>`
+    </tr>`;
+      }
     )
     .join("");
 
@@ -774,7 +787,7 @@ function renderNotifLists() {
     if (store.notifications.length === 0) {
       el.innerHTML = `
         <div class="empty-state">
-          <div class="empty-state-icon">🔕</div>
+          <div class="empty-state-icon"><i class="fas fa-bell-slash"></i></div>
           <div class="empty-state-text">No notifications.</div>
         </div>`;
       return;
@@ -784,7 +797,7 @@ function renderNotifLists() {
       .map(
         (n) => `
       <div class="notif-item ${!n.is_read ? "unread" : ""}" onclick="markNotifRead(${n.id})">
-        <div class="notif-item-icon" style="${n.icon_bg || ""}">${n.icon || "🔔"}</div>
+        <div class="notif-item-icon" style="${n.icon_bg || ""}">${n.icon || "<i class='fas fa-bell'></i>"}</div>
         <div class="notif-item-body">
           <div class="notif-item-title">${n.title}</div>
           <div class="notif-item-desc">${n.description}</div>
@@ -814,9 +827,9 @@ function renderAnnouncements() {
         <div class="announce-card-title">${a.title}</div>
         <div class="announce-card-body">${a.body}</div>
         <div class="announce-card-meta">
-          <span>👤 ${a.author || 'Unknown'}</span>
-          <span>🕐 ${timeAgo(a.created_at)}</span>
-          <span>🎯 ${a.target_audience}</span>
+          <span><i class="fas fa-user"></i> ${a.author || 'Unknown'}</span>
+          <span><i class="fas fa-clock"></i> ${timeAgo(a.created_at)}</span>
+          <span><i class="fas fa-bullseye"></i> ${a.target_audience}</span>
         </div>
       </div>`
       )
@@ -872,7 +885,7 @@ async function sendNotification() {
     await api('/notifications', 'POST', {
       title,
       description: desc,
-      icon: '📬',
+      icon: "<i class='fas fa-envelope-open-text'></i>",
       icon_bg: 'background:var(--accent-lt);color:var(--accent)',
       created_by: parseInt(getUserId()) || null,
     });
@@ -898,9 +911,11 @@ async function sendNotification() {
 const DAYS  = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 const TIMES = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"];
 
-function renderScheduleGrid(gridId) {
+function renderScheduleGrid(gridId, canEdit = false) {
   const grid = document.getElementById(gridId);
   if (!grid) return;
+
+  const currentUserId = parseInt(getUserId());
 
   let html = `<div class="sch-header"></div>`;
   DAYS.forEach((d) => (html += `<div class="sch-header">${d}</div>`));
@@ -908,19 +923,143 @@ function renderScheduleGrid(gridId) {
   TIMES.forEach((time) => {
     html += `<div class="sch-time">${time}</div>`;
     DAYS.forEach((day) => {
-      const events = (store.scheduleData[day] || []).filter((e) => e.time === time);
+      let events = (store.scheduleData[day] || []).filter((e) => e.time === time);
+      
+      if (gridId === "facScheduleGrid" || gridId === "facOverviewScheduleGrid") {
+         events = events.filter(e => e.faculty_id === currentUserId);
+      }
+
       html += `<div class="sch-cell">`;
       events.forEach((ev) => {
         html += `<div class="sch-event ${ev.color}">
           <span class="sch-event-label">${ev.label}</span>
-          <span class="sch-event-room">${ev.room}</span>
-        </div>`;
+          <span class="sch-event-room">${ev.room}</span>`;
+        if (canEdit) {
+           html += `<div style="margin-top: 5px; display:flex; gap: 5px;"><button onclick="editSchedule(${ev.id})" style="font-size:0.7rem;background:rgba(255,255,255,0.2);border:none;color:currentColor;border-radius:3px;cursor:pointer;padding:2px 5px;">Edit</button><button onclick="deleteSchedule(${ev.id})" style="font-size:0.7rem;background:rgba(255,0,0,0.4);border:none;color:white;border-radius:3px;cursor:pointer;padding:2px 5px;">Del</button></div>`;
+        }
+        html += `</div>`;
       });
       html += `</div>`;
     });
   });
 
   grid.innerHTML = html;
+}
+
+function renderStudentSchedule() {
+  const fac = document.getElementById("studentFacultySelect")?.value;
+  const grid = document.getElementById("studentScheduleGrid");
+  if (!grid) return;
+  if (!fac) {
+    grid.innerHTML = `<div style="grid-column: 1/-1;text-align:center;padding:2rem;">Please select a faculty to view their schedule.</div>`;
+    return;
+  }
+
+  const filtered = store.rawScheduleRows.filter(r => r.faculty_name === fac);
+
+  const grouped = {};
+  filtered.forEach((row) => {
+    const day = row.day_of_week;
+    if (!grouped[day]) grouped[day] = [];
+    grouped[day].push({
+      time: row.time_slot.substring(0, 5),
+      label: row.subject,
+      room: row.room,
+      color: row.color_class,
+      id: row.id
+    });
+  });
+
+  let html = `<div class="sch-header"></div>`;
+  DAYS.forEach((d) => (html += `<div class="sch-header">${d}</div>`));
+
+  TIMES.forEach((time) => {
+    html += `<div class="sch-time">${time}</div>`;
+    DAYS.forEach((day) => {
+      const events = (grouped[day] || []).filter((e) => e.time === time);
+      html += `<div class="sch-cell" style="position:relative;">`;
+      if (events.length === 0) {
+        html += `<span style="color:#aaa;font-size:0.8rem;text-align:center;display:block;margin-top:.5rem;">Free</span>`;
+      } else {
+        events.forEach((ev) => {
+          html += `<div class="sch-event ${ev.color}">
+            <span class="sch-event-label">${ev.label}</span>
+            <span class="sch-event-room">${ev.room} <span style="font-size:0.7em">(Busy)</span></span>
+          </div>`;
+        });
+      }
+      html += `</div>`;
+    });
+  });
+
+  grid.innerHTML = html;
+}
+
+async function deleteSchedule(id) {
+  if(!confirm("Are you sure you want to delete this schedule entry?")) return;
+  try {
+    await api('/schedule/' + id, 'DELETE');
+    await loadSchedule();
+    renderScheduleGrid("facScheduleGrid", true);
+    renderScheduleGrid("facOverviewScheduleGrid");
+    showToast("Schedule deleted successfully", "success");
+  } catch(err) {
+    showToast(err.message || "Failed to delete schedule", "error");
+  }
+}
+
+async function editSchedule(id) {
+  const item = store.rawScheduleRows.find(r => r.id === id);
+  if (!item) {
+    showToast("Schedule item not found", "error");
+    return;
+  }
+  
+  document.getElementById("editSchId").value = id;
+  document.getElementById("editSchDay").value = item.day_of_week;
+  document.getElementById("editSchTime").value = item.time_slot.substring(0, 5);
+  document.getElementById("editSchLabel").value = item.subject;
+  document.getElementById("editSchRoom").value = item.room;
+  document.getElementById("editSchColor").value = item.color_class;
+
+  openModal('editScheduleModal');
+}
+
+async function saveEditSchedule() {
+  const id    = document.getElementById("editSchId").value;
+  const day   = document.getElementById("editSchDay").value;
+  const time  = document.getElementById("editSchTime").value;
+  const label = document.getElementById("editSchLabel").value.trim();
+  const room  = document.getElementById("editSchRoom").value.trim();
+  const color = document.getElementById("editSchColor").value;
+
+  if (!label || !room) {
+    showToast("Subject and room are required", "error");
+    return;
+  }
+
+  const formatted = time.substring(0, 2) + ":00:00";
+
+  try {
+    await api('/schedule/' + id, 'PUT', {
+      day_of_week: day,
+      time_slot: formatted,
+      subject: label,
+      room: room,
+      color_class: color,
+    });
+
+    closeModal("editScheduleModal");
+
+    await loadSchedule();
+    renderStudentSchedule();
+    renderScheduleGrid("facScheduleGrid", true);
+    renderScheduleGrid("facOverviewScheduleGrid");
+
+    showToast("Schedule updated successfully", "success");
+  } catch (err) {
+    showToast(err.message || "Failed to update schedule", "error");
+  }
 }
 
 async function uploadSchedule() {
@@ -952,8 +1091,8 @@ async function uploadSchedule() {
     document.getElementById("uploadSchRoom").value = "";
 
     await loadSchedule();
-    renderScheduleGrid("studentScheduleGrid");
-    renderScheduleGrid("facScheduleGrid");
+    renderStudentSchedule();
+    renderScheduleGrid("facScheduleGrid", true);
     renderScheduleGrid("facOverviewScheduleGrid");
 
     showToast(`Added ${label} on ${day} at ${formatted} — saved to database ✓`, "success");
@@ -975,7 +1114,7 @@ async function updateAdminStats() {
 
     grid.innerHTML = `
       <div class="stat-card">
-        <div class="stat-card-icon" style="background:var(--accent-lt);color:var(--accent)">👥</div>
+        <div class="stat-card-icon" style="background:var(--accent-lt);color:var(--accent)"><i class="fas fa-users"></i></div>
         <div class="stat-card-body">
           <div class="stat-card-value">${stats.totalUsers}</div>
           <div class="stat-card-label">Total Users</div>
@@ -983,7 +1122,7 @@ async function updateAdminStats() {
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-card-icon" style="background:var(--accent-2-lt);color:var(--accent-2)">📦</div>
+        <div class="stat-card-icon" style="background:var(--accent-2-lt);color:var(--accent-2)"><i class="fas fa-box"></i></div>
         <div class="stat-card-body">
           <div class="stat-card-value">${stats.totalItems}</div>
           <div class="stat-card-label">Inventory Items</div>
@@ -991,7 +1130,7 @@ async function updateAdminStats() {
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-card-icon" style="background:var(--warn-lt);color:var(--warn)">🎫</div>
+        <div class="stat-card-icon" style="background:var(--warn-lt);color:var(--warn)"><i class="fas fa-ticket-alt"></i></div>
         <div class="stat-card-body">
           <div class="stat-card-value">${stats.activeReservations}</div>
           <div class="stat-card-label">Active Reservations</div>
@@ -999,7 +1138,7 @@ async function updateAdminStats() {
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-card-icon" style="background:var(--danger-lt);color:var(--danger)">📢</div>
+        <div class="stat-card-icon" style="background:var(--danger-lt);color:var(--danger)"><i class="fas fa-bullhorn"></i></div>
         <div class="stat-card-body">
           <div class="stat-card-value">${stats.totalAnnouncements}</div>
           <div class="stat-card-label">Announcements</div>
@@ -1021,7 +1160,7 @@ async function updateFacStats() {
 
     grid.innerHTML = `
       <div class="stat-card">
-        <div class="stat-card-icon" style="background:var(--accent-lt);color:var(--accent)">👩‍🎓</div>
+        <div class="stat-card-icon" style="background:var(--accent-lt);color:var(--accent)"><i class="fas fa-user-graduate"></i></div>
         <div class="stat-card-body">
           <div class="stat-card-value">${stats.assignedStudents}</div>
           <div class="stat-card-label">Assigned Students</div>
@@ -1029,19 +1168,11 @@ async function updateFacStats() {
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-card-icon" style="background:var(--accent-2-lt);color:var(--accent-2)">📚</div>
+        <div class="stat-card-icon" style="background:var(--accent-2-lt);color:var(--accent-2)"><i class="fas fa-book"></i></div>
         <div class="stat-card-body">
           <div class="stat-card-value">${stats.todayClasses}</div>
           <div class="stat-card-label">Classes Today</div>
           <div class="stat-card-delta up">↑ On schedule</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-card-icon" style="background:var(--warn-lt);color:var(--warn)">🔔</div>
-        <div class="stat-card-body">
-          <div class="stat-card-value">${stats.unreadNotifications}</div>
-          <div class="stat-card-label">Unread Notifications</div>
-          <div class="stat-card-delta ${stats.unreadNotifications > 0 ? "warn" : "up"}">${stats.unreadNotifications > 0 ? "⚡ Needs attention" : "✓ All caught up"}</div>
         </div>
       </div>
     `;
@@ -1059,7 +1190,7 @@ async function updateCRStats() {
 
     grid.innerHTML = `
       <div class="stat-card">
-        <div class="stat-card-icon" style="background:var(--accent-lt);color:var(--accent)">📢</div>
+        <div class="stat-card-icon" style="background:var(--accent-lt);color:var(--accent)"><i class="fas fa-bullhorn"></i></div>
         <div class="stat-card-body">
           <div class="stat-card-value">${stats.totalAnnouncements}</div>
           <div class="stat-card-label">Announcements</div>
@@ -1067,7 +1198,7 @@ async function updateCRStats() {
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-card-icon" style="background:var(--accent-2-lt);color:var(--accent-2)">🔔</div>
+        <div class="stat-card-icon" style="background:var(--accent-2-lt);color:var(--accent-2)"><i class="fas fa-bell"></i></div>
         <div class="stat-card-body">
           <div class="stat-card-value">${stats.totalNotifications}</div>
           <div class="stat-card-label">Notifications Sent</div>
@@ -1075,7 +1206,7 @@ async function updateCRStats() {
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-card-icon" style="background:var(--warn-lt);color:var(--warn)">📦</div>
+        <div class="stat-card-icon" style="background:var(--warn-lt);color:var(--warn)"><i class="fas fa-box"></i></div>
         <div class="stat-card-body">
           <div class="stat-card-value">${stats.itemsAvailable}</div>
           <div class="stat-card-label">Items Available</div>
@@ -1167,7 +1298,7 @@ async function loadReservations() {
 
 async function loadNotifications() {
   try {
-    store.notifications = await api('/notifications');
+    store.notifications = await api(`/notifications?role=${store.session.role}`);
   } catch (err) {
     console.error('Failed to load notifications:', err);
     store.notifications = [];
@@ -1186,6 +1317,15 @@ async function loadAnnouncements() {
 async function loadSchedule() {
   try {
     const rows = await api('/schedule');
+    store.rawScheduleRows = rows;
+    
+    const facSelect = document.getElementById('studentFacultySelect');
+    if (facSelect) {
+      const faculties = [...new Set(rows.map(r => r.faculty_name).filter(Boolean))];
+      facSelect.innerHTML = `<option value="">Select Faculty...</option>` + 
+        faculties.map(f => `<option value="${f}">${f}</option>`).join('');
+    }
+
     // Transform flat rows into grouped format: { Mon: [...], Tue: [...], ... }
     store.scheduleData = {};
     rows.forEach((row) => {
@@ -1196,6 +1336,8 @@ async function loadSchedule() {
         label: row.subject,
         room: row.room,
         color: row.color_class,
+        id: row.id,
+        faculty_id: row.faculty_id
       });
     });
   } catch (err) {
@@ -1402,6 +1544,11 @@ async function initDashboard() {
   if (profileAvatar) profileAvatar.textContent = initials;
   if (profileName)   profileName.textContent = userName.split(" ")[0];
 
+  if (role === 'faculty') {
+    const notifBell = document.getElementById("notifBellWrap");
+    if (notifBell) notifBell.style.display = 'none';
+  }
+
   // Update greetings
   const greetingEls = {
     student:  document.getElementById("studentGreeting"),
@@ -1411,10 +1558,10 @@ async function initDashboard() {
   };
 
   const greetingMessages = {
-    student:  `${greeting}, ${userName.split(" ")[0]} 👋`,
-    admin:    `Welcome back, ${userName.split(" ")[0]} 🛡️`,
-    faculty:  `${greeting}, ${userName} 📚`,
-    subadmin: `Hey ${userName.split(" ")[0]}! Welcome back 📋`,
+    student:  `${greeting}, ${userName.split(" ")[0]}`,
+    admin:    `Welcome back, ${userName.split(" ")[0]}`,
+    faculty:  `${greeting}, ${userName}`,
+    subadmin: `Hey ${userName.split(" ")[0]}! Welcome back`,
   };
 
   if (greetingEls[role]) {
@@ -1445,8 +1592,8 @@ function renderAll() {
   renderNotifPopup();
   renderNotifLists();
   renderAnnouncements();
-  renderScheduleGrid("studentScheduleGrid");
-  renderScheduleGrid("facScheduleGrid");
+  renderStudentSchedule();
+  renderScheduleGrid("facScheduleGrid", true);
   renderScheduleGrid("facOverviewScheduleGrid");
   renderFacStudents();
   updateNotifBadge();
