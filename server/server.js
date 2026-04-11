@@ -321,10 +321,10 @@ app.post('/api/reservations', async (req, res) => {
     // Decrease available qty
     await conn.query('UPDATE inventory SET available_qty = available_qty - ? WHERE id = ?', [reserveQty, item_id]);
 
-    // Create reservation
+    // Create reservation (starts as pending)
     const [result] = await conn.query(
       'INSERT INTO reservations (user_id, item_id, qty, status, due_date) VALUES (?, ?, ?, ?, ?)',
-      [user_id, item_id, reserveQty, 'active', due_date || getFutureDate(7)]
+      [user_id, item_id, reserveQty, 'pending', due_date || getFutureDate(7)]
     );
 
     await conn.commit();
@@ -346,6 +346,31 @@ app.post('/api/reservations', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   } finally {
     conn.release();
+  }
+});
+
+// PUT approve reservation (Admin/CR only)
+app.put('/api/reservations/:id/approve', async (req, res) => {
+  try {
+    const [result] = await pool.query('UPDATE reservations SET status = ? WHERE id = ? AND status = ?', ['active', req.params.id, 'pending']);
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Reservation not found or already approved' });
+    }
+
+    const [updated] = await pool.query(`
+      SELECT r.id, r.user_id, r.item_id, r.qty, r.status, r.due_date,
+             u.name AS student, i.name AS item
+      FROM reservations r
+      JOIN users u ON r.user_id = u.id
+      JOIN inventory i ON r.item_id = i.id
+      WHERE r.id = ?
+    `, [req.params.id]);
+
+    res.json(updated[0]);
+  } catch (err) {
+    console.error('Approve reservation error:', err);
+    res.status(500).json({ error: 'Server error' });
   }
 });
 

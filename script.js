@@ -717,11 +717,18 @@ function renderAdminReservations() {
       <td><span class="badge ${statusBadgeClass(r.status)}">${r.status}</span></td>
       <td>${formatDate(r.due_date)}${timer}</td>
       <td>
-        ${
-          r.status !== "expired"
-            ? `<button class="table-btn table-btn-cancel" onclick="cancelReservation(${r.id})">Cancel</button>`
-            : `<span style="color:var(--text-3);font-size:.82rem">—</span>`
-        }
+        <div class="table-actions">
+          ${
+            r.status === "pending"
+              ? `<button class="table-btn table-btn-approve" onclick="approveReservation(${r.id})">Approve</button>`
+              : ""
+          }
+          ${
+            r.status !== "expired"
+              ? `<button class="table-btn table-btn-cancel" onclick="cancelReservation(${r.id})">Cancel</button>`
+              : `<span style="color:var(--text-3);font-size:.82rem">—</span>`
+          }
+        </div>
       </td>
     </tr>`;
       }
@@ -764,6 +771,21 @@ async function cancelReservation(id) {
     showToast(`Reservation for ${result.item} cancelled — updated in database ✓`, "info");
   } catch (err) {
     showToast(err.message || "Failed to cancel reservation", "error");
+  }
+}
+
+async function approveReservation(id) {
+  try {
+    const result = await api(`/reservations/${id}/approve`, 'PUT');
+
+    await loadReservations();
+    renderStudentReservations();
+    renderAdminReservations();
+    updateAdminStats();
+
+    showToast(`Reservation for ${result.item} approved — student can now collect item ✓`, "success");
+  } catch (err) {
+    showToast(err.message || "Failed to approve reservation", "error");
   }
 }
 
