@@ -1149,8 +1149,16 @@ table { border-collapse: collapse; width: 100%; }
 .table-btn-edit:hover { background: var(--border); }
 
 .table-btn-promote {
+  background: var(--accent-lt);
+  color: var(--accent);
+}
+.table-btn-promote:hover { background: var(--accent-2-lt); }
 
-.table-btn-cancel:hover { background: var(--warn); color: #fff; }
+.table-btn-delete, .table-btn-cancel {
+  background: var(--danger-lt);
+  color: var(--danger);
+}
+.table-btn-delete:hover, .table-btn-cancel:hover { background: #fee2e2; }
 
 /* ── Badges ── */
 .badge {
